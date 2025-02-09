@@ -245,16 +245,11 @@ def main_menu(api_key, service_id, operator):
                 break
         elif choice == "2":
             orders = get_active_orders(api_key)
-            if orders:
-                for order in orders:
-                    print(color_text(f"🆔 ID: {order['id']} | 📞 Nomor: {order['number']} | 📊 Status: {order['status']} | 🗓 Tanggal: {order['date']}", "green"))
-            else:
-                print(color_text("❗ Tidak ada pesanan aktif saat ini.", "red"))
-            backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
+            for order in orders:
+                print(color_text(f"ID: {order['id']} | Nomor: {order['number']} | Status: {order['status']}", "green"))
+            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
             if backmenu == "y":
                 continue
-            else:
-                break
         elif choice == "3":
             cancel_or_resend_order(api_key)
             backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
