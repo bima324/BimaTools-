@@ -11,7 +11,7 @@ def color_text(text, color):
         "magenta": "\033[35m",
         "cyan": "\033[36m",
         "white": "\033[37m",
-        "reset": "\033[0m"
+        "reset": "\033[0m"  # Untuk mengembalikan warna ke default
     }
     return f"{colors[color]}{text}{colors['reset']}"
 
@@ -27,6 +27,7 @@ def display_title():
 
 def get_api_key():
     api_key_file = "apivirtu.txt"
+
     if os.path.exists(api_key_file):
         with open(api_key_file, "r") as file:
             api_key = file.read().strip()
@@ -34,7 +35,8 @@ def get_api_key():
         api_key = input(color_text("Masukkan API Key Anda: ", "green")).strip()
         with open(api_key_file, "w") as file:
             file.write(api_key)
-        print(color_text("✅ API Key disimpan dalam file.", "green"))
+        print(color_text("API Key disimpan dalam file.", "green"))
+
     return api_key
 
 def create_order(api_key, service_id, operator):
@@ -44,55 +46,77 @@ def create_order(api_key, service_id, operator):
         print(color_text("Jumlah order harus berupa angka positif.", "red"))
         return
     if quantity <= 0:
-        print(color_text("Jumlah order harus lebih dari 0.", "red"))
+        print(color_text("Jumlah order harus berupa angka positif.", "red"))
         return
 
     success_numbers = []
+
     for _ in range(quantity):
         url = f"https://virtusim.com/api/json.php?api_key={api_key}&action=order&service={service_id}&operator={operator}"
         response = requests.get(url)
-        
+
         if response.status_code != 200:
-            print(color_text(f"❌ Error: {response.text}", "red"))
+            print(color_text(f"Error: {response.text}", "red"))
             continue
-        
+
         result = response.json()
         if result.get("status"):
             success_numbers.append(result["data"].get("number"))
         else:
-            print(color_text(f"⚠️ Order Gagal: {result['data'].get('msg')}", "red"))
+            print(color_text(f"Order Gagal: {result['data'].get('msg')}", "red"))
 
     if success_numbers:
-        print(color_text("✅ Order Berhasil! Berikut nomor yang berhasil dipesan:", "green"))
+        print(color_text("Order Berhasil:", "green"))
         for number in success_numbers:
-            print(color_text(f"📱 {number}", "blue"))
+            print(color_text(number, "green"))
 
 def get_active_orders(api_key):
     url = f"https://virtusim.com/api/json.php?api_key={api_key}&action=active_order"
     response = requests.get(url)
     
     if response.status_code != 200:
-        print(color_text("❌ Gagal mengambil data order aktif.", "red"))
+        print(color_text("Gagal mengambil data order aktif.", "red"))
         return []
-    
+
     result = response.json()
     if result.get("status") and result.get("data"):
         return result["data"]
     else:
-        print(color_text("⚠️ Tidak ada order aktif saat ini.", "red"))
+        print(color_text("Orderan kosong bro", "red"))
         return []
 
-def monitor_sms(api_key, interval=5):
-    print(color_text("📡 Memulai pemantauan SMS terbaru...", "green"))
+def resend_order(api_key, order_id):
+    """
+    Fungsi untuk mengirim ulang order berdasarkan ID order.
+    """
+    url = f"https://virtusim.com/api/json.php?api_key={api_key}&action=set_status&id={order_id}&status=3"
+    response = requests.get(url)
+    result = response.json()
+
+    if result.get("status"):
+        print(color_text(f"Order {order_id} berhasil diresend.", "green"))
+    else:
+        print(color_text(f"Gagal resend order {order_id}: {result['data'].get('msg')}", "red"))
+
+
+def monitor_sms(api_key, interval=5, resend_interval=120):
+    """
+    Memantau SMS terbaru dan melakukan resend pada order yang sudah menerima SMS setiap 2 menit.
+    """
+    print(color_text("Memulai pemantauan SMS terbaru...", "green"))
     latest_sms = []
     number_index = {}
+    last_resend_time = time.time()
 
     while True:
+        # Ambil order aktif
         orders = get_active_orders(api_key)
 
         if orders:
             for order in orders:
+                # Periksa jika order sudah menerima SMS
                 if order.get("status") == "Otp Diterima" and order.get("sms"):
+                    # Tampilkan detail SMS baru
                     sms_data = {
                         "number": order.get("number"),
                         "otp": order.get("otp"),
@@ -108,21 +132,143 @@ def monitor_sms(api_key, interval=5):
                     if sms_data not in latest_sms:
                         latest_sms.append(sms_data)
                         latest_sms.sort(key=lambda x: x["order_number"])
-                        
-                        print(color_text("📩 SMS Baru Diterima!", "green"))
-                        print(color_text(f"📌 Nomor Urut: {sms_data['order_number']}", "cyan"))
-                        print(color_text(f"📌 Nomor: {sms_data['number']}", "cyan"))
-                        print(color_text(f"🔑 Kode OTP: {sms_data['otp']}", "green"))
-                        print(color_text(f"🔹 Layanan: {sms_data['service_name']}", "blue"))
+
+                        print(color_text("SMS Baru Diterima:", "green"))
+                        print(color_text(f"Nomor Urut: {sms_data['order_number']}", "cyan"))
+                        print(color_text(f"Nomor: {sms_data['number']}", "cyan"))
+                        print(color_text(f"OTP: {sms_data['otp']}", "green"))
+                        print(color_text(f"Service: {sms_data['service_name']}", "green"))
                         print(color_text("------------------------------------", "green"))
+
+                    # Resend order jika waktu resend terpenuhi
+                    if time.time() - last_resend_time >= resend_interval:
+                        print(color_text(f"Resend Order untuk nomor {order['number']}...", "green"))
+                        resend_order(api_key, order["id"])
+
+            # Perbarui waktu terakhir melakukan resend
+            if time.time() - last_resend_time >= resend_interval:
+                last_resend_time = time.time()
+
         else:
-            print(color_text("🚀 Tidak ada SMS baru. Memeriksa lagi...", "yellow"))
+            print(color_text("Tidak ada SMS baru. Memeriksa lagi...", "red"))
             number_index.clear()
-        
+
         time.sleep(interval)
 
-if __name__ == "__main__":
-    clear_screen()
-    display_title()
-    api_key = get_api_key()
-    monitor_sms(api_key)
+
+
+def cancel_or_resend_order(api_key):
+    orders = get_active_orders(api_key)
+
+    if not orders:
+        print(color_text("Tidak ada order aktif untuk dikelola.", "red"))
+        return
+
+    # Tampilkan daftar order
+    print(color_text("Daftar Order Aktif:", "green"))
+    for idx, order in enumerate(orders, 1):
+        print(color_text(f"{idx}. ID: {order['id']} | Nomor: {order['number']}", "green"))
+
+    # Meminta input untuk rentang dan aksi
+    choice = input(color_text("Masukkan nomor order yang ingin dikelola (contoh 1-3): ", "green")).strip()
+    action = input(color_text("Apa yang ingin Anda lakukan pada order tersebut:\n1. Cancel\n2. Resend\nPilihan (1/2): ", "green")).strip()
+
+    # Validasi awal input
+    valid_actions = {"1", "2"}
+    if action not in valid_actions:
+        print(color_text("Pilihan aksi tidak valid.", "red"))
+        return
+
+    try:
+        # Validasi dan parsing rentang input
+        start, end = map(int, choice.split('-'))
+        if start < 1 or end > len(orders) or start > end:
+            raise ValueError("Rentang tidak valid.")
+        selected_orders = orders[start - 1:end]
+    except ValueError:
+        print(color_text("Rentang atau format input tidak valid.", "red"))
+        return
+
+    # Aksi batch pada order yang dipilih
+    urls = []
+    for order in selected_orders:
+        order_id = order["id"]
+        status = "2" if action == "1" else "3"  # Cancel = 2, Resend = 3
+        urls.append(f"https://virtusim.com/api/json.php?api_key={api_key}&action=set_status&id={order_id}&status={status}")
+
+    # Kirim semua request dalam batch
+    for url in urls:
+        response = requests.get(url)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("status"):
+                action_text = "dibatalkan" if action == "1" else "diresend"
+                print(color_text(f"Order {result['data']['id']} berhasil {action_text}.", "green"))
+            else:
+                print(color_text(f"Gagal memproses order: {result['data'].get('msg')}", "red"))
+        else:
+            print(color_text(f"Gagal mengakses API untuk URL: {url}", "red"))
+
+    print(color_text("Proses selesai untuk semua order yang dipilih.", "green"))
+
+def main_menu(api_key, service_id, operator):
+    while True:
+        # Tampilkan judul saat program dimulai
+        clear_screen()
+        display_title()
+        print(color_text("\nMenu Utama:", "green"))
+        print(color_text("1. Pesan Nomor Baru", "green"))
+        print(color_text("2. Cek Order Aktif", "green"))
+        print(color_text("3. Kelola Order", "green"))
+        print(color_text("4. Monitoring SMS Masuk (Mulai Ulang Program jika ingin ke-menu)", "green"))
+        print(color_text("5. Keluar", "green"))
+
+        choice = input(color_text("Pilih opsi (1-5): ", "green"))
+
+        if choice == "1":
+            print(color_text("Pilihan Layanan Operator:", "green"))
+            print(color_text("1. GOJEK", "green"))
+            print(color_text("2. WHATSAPP", "green"))
+            choice_service = input(color_text("Pilih Layanan (1/2): ", "green"))
+            if choice_service == "1":
+                service_id = "305"
+            elif choice_service == "2":
+                service_id = "6155"
+
+            create_order(api_key, service_id, operator)
+            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            if backmenu == "y":
+                continue
+            else:
+                break
+        elif choice == "2":
+            orders = get_active_orders(api_key)
+            for order in orders:
+                print(color_text(f"ID: {order['id']} | Nomor: {order['number']} | Status: {order['status']}", "green"))
+            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            if backmenu == "y":
+                continue
+            else:
+                break
+        elif choice == "3":
+            cancel_or_resend_order(api_key)
+            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            if backmenu == "y":
+                continue
+            else:
+                break
+        elif choice == "4":
+            monitor_sms(api_key)
+        elif choice == "5":
+            print(color_text("Sayonaraaa!", "yellow"))
+            break
+        else:
+            print(color_text("Pilihan tidak valid. Harap pilih antara 1-5.", "red"))
+
+# Ambil API Key
+service_id = ""
+default_operator = "any"
+api_key = get_api_key()
+
+# Jalankan menu utama
+main_menu(api_key, service_id, default_operator)
