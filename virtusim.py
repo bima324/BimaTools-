@@ -19,11 +19,11 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 def display_title():
-    print(color_text("==========================================", "cyan"))
+    print(color_text("==========================================", "green"))
     print(color_text("          🔥 BIMA PROJECT 🔥          ", "yellow"))
     print(color_text("   # Your Virtual Number Manager #   ", "cyan"))
     print(color_text("         Owner: @bima.gunawan         ", "magenta"))
-    print(color_text("==========================================", "cyan"))
+    print(color_text("==========================================", "green"))
 
 def get_api_key():
     api_key_file = "apivirtu.txt"
@@ -225,17 +225,26 @@ def main_menu(api_key, service_id, operator):
 
         choice = input(color_text("💬 Silakan pilih opsi (1-5) dengan bijak: ", "green"))  # Warna hijau untuk prompt input
 
-
-
         if choice == "1":
             print(color_text("📱 Pilih Layanan Operator:", "green"))
             print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "green"))
             print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "green"))
-            choice_service = input(color_text("🔢 Pilih Layanan (1/2): ", "green"))
+            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "green"))
+            print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "green"))
+            choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4): ", "green"))
+            
             if choice_service == "1":
-                service_id = "305"
+                service_id = "305"  # GOJEK
             elif choice_service == "2":
-                service_id = "6155"
+                service_id = "6155"  # WHATSAPP
+            elif choice_service == "3":
+                service_id = "733"  # TELEGRAM
+            elif choice_service == "4":
+                service_id = "722"  # SHOPEE
+            else:
+                print(color_text("❌ Pilihan tidak valid, coba lagi.", "red"))
+                continue
+
 
             create_order(api_key, service_id, operator)
             backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
