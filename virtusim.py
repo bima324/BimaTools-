@@ -19,11 +19,11 @@ def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
 
 def display_title():
-    print(color_text("==========================================", "green"))
+    print(color_text("==========================================", "cyan"))
     print(color_text("          🔥 BIMA PROJECT 🔥          ", "yellow"))
     print(color_text("   # Your Virtual Number Manager #   ", "cyan"))
     print(color_text("         Owner: @bima.gunawan         ", "magenta"))
-    print(color_text("==========================================", "green"))
+    print(color_text("==========================================", "cyan"))
 
 def get_api_key():
     api_key_file = "apivirtu.txt"
