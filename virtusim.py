@@ -216,14 +216,14 @@ def main_menu(api_key, service_id, operator):
         # Tampilkan judul saat program dimulai
         clear_screen()
         display_title()
-        print(color_text("\nSelamat Datang di Menu Utama", "cyan"))  # Warna cyan untuk judul
-        print(color_text("1. Permintaan Nomor Baru", "blue"))  # Warna biru untuk opsi
-        print(color_text("2. Periksa Status Order yang Aktif", "blue"))  # Warna biru untuk opsi
-        print(color_text("3. Manajemen Order Anda", "blue"))  # Warna biru untuk opsi
-        print(color_text("4. Pemantauan SMS Masuk", "blue"))  # Warna biru untuk opsi
-        print(color_text("5. Keluar dari Program", "red"))  # Warna merah untuk opsi keluar
+        print(color_text("\n✨ Selamat datang di Menu Utama! ✨", "cyan"))  # Warna cyan untuk judul
+        print(color_text("1. 📱 Permintaan Nomor Baru yang Lebih Personal", "blue"))  # Warna biru untuk opsi
+        print(color_text("2. 🔍 Periksa Status Order yang Sedang Berjalan", "blue"))  # Warna biru untuk opsi
+        print(color_text("3. 📦 Manajemen Order Anda dengan Mudah", "blue"))  # Warna biru untuk opsi
+        print(color_text("4. 📩 Pemantauan SMS Masuk yang Real-Time", "blue"))  # Warna biru untuk opsi
+        print(color_text("5. ❌ Keluar dari Program dengan Tenang", "red"))  # Warna merah untuk opsi keluar
 
-        choice = input(color_text("Silakan pilih opsi (1-5): ", "green"))  # Warna hijau untuk prompt input
+        choice = input(color_text("💬 Silakan pilih opsi (1-5) dengan bijak: ", "green"))  # Warna hijau untuk prompt input
 
 
 
