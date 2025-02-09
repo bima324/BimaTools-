@@ -216,14 +216,16 @@ def main_menu(api_key, service_id, operator):
         # Tampilkan judul saat program dimulai
         clear_screen()
         display_title()
-        print(color_text("\nMenu Utama:", "green"))
-        print(color_text("1. Pesan Nomor Baru", "green"))
-        print(color_text("2. Cek Order Aktif", "green"))
-        print(color_text("3. Kelola Order", "green"))
-        print(color_text("4. Monitoring SMS Masuk (Mulai Ulang Program jika ingin ke-menu)", "green"))
-        print(color_text("5. Keluar", "green"))
+        print(color_text("\n📌 Menu Utama", "green"))
+        print(color_text("1️⃣  Pesan Nomor Baru   - 📲 Dapatkan nomor baru dengan cepat dan mudah", "green"))
+        print(color_text("2️⃣  Cek Order Aktif    - 🔍 Lihat status pesanan yang sedang berjalan", "green"))
+        print(color_text("3️⃣  Kelola Order       - ⚙️ Atur dan kelola pesanan sesuai kebutuhan", "green"))
+        print(color_text("4️⃣  Monitoring SMS     - 📩 Pantau pesan masuk secara real-time", "green"))
+        print(color_text("                         🔄 (Restart program untuk kembali ke menu)", "green"))
+        print(color_text("5️⃣  Keluar             - ❌ Akhiri program dengan aman", "green"))
 
-        choice = input(color_text("Pilih opsi (1-5): ", "green"))
+        choice = input(color_text("\n🟢 Silakan pilih opsi (1-5): ", "green"))
+
 
         if choice == "1":
             print(color_text("Pilihan Layanan Operator:", "green"))
