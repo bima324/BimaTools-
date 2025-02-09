@@ -228,44 +228,53 @@ def main_menu(api_key, service_id, operator):
 
 
         if choice == "1":
-            print(color_text("Pilihan Layanan Operator:", "green"))
-            print(color_text("1. GOJEK", "green"))
-            print(color_text("2. WHATSAPP", "green"))
-            choice_service = input(color_text("Pilih Layanan (1/2): ", "green"))
+            print(color_text("📱 Pilih Layanan Operator:", "green"))
+            print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "green"))
+            print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "green"))
+            choice_service = input(color_text("🔢 Pilih Layanan (1/2): ", "green"))
             if choice_service == "1":
                 service_id = "305"
             elif choice_service == "2":
                 service_id = "6155"
 
             create_order(api_key, service_id, operator)
-            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
             if backmenu == "y":
                 continue
             else:
                 break
         elif choice == "2":
             orders = get_active_orders(api_key)
-            for order in orders:
-                print(color_text(f"ID: {order['id']} | Nomor: {order['number']} | Status: {order['status']}", "green"))
-            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            if orders:
+                for order in orders:
+                    print(color_text(f"🆔 ID: {order['id']} | 📞 Nomor: {order['number']} | 📊 Status: {order['status']} | 🗓 Tanggal: {order['date']}", "green"))
+            else:
+                print(color_text("❗ Tidak ada pesanan aktif saat ini.", "red"))
+            backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
             if backmenu == "y":
                 continue
             else:
                 break
         elif choice == "3":
             cancel_or_resend_order(api_key)
-            backmenu = input(color_text("Ingin kembali ke menu ? (y/n) : ", "green"))
+            backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
             if backmenu == "y":
                 continue
             else:
                 break
         elif choice == "4":
             monitor_sms(api_key)
+            backmenu = input(color_text("🔙 Kembali ke menu utama? (y/n): ", "green"))
+            if backmenu == "y":
+                continue
+            else:
+                break
         elif choice == "5":
-            print(color_text("Sayonaraaa!", "yellow"))
+            print(color_text("👋 Sampai jumpa! Terima kasih telah menggunakan layanan kami. Semoga hari Anda menyenankan! 🌟", "yellow"))
             break
         else:
-            print(color_text("Pilihan tidak valid. Harap pilih antara 1-5.", "red"))
+            print(color_text("❌ Pilihan tidak valid. Harap pilih antara 1-5.", "red"))
+
 
 # Ambil API Key
 service_id = ""
