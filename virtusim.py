@@ -226,12 +226,12 @@ def main_menu(api_key, service_id, operator):
         choice = input(color_text("💬 Silakan pilih opsi (1-5) dengan bijak: ", "green"))  # Warna hijau untuk prompt input
 
         if choice == "1":
-            print(color_text("📱 Pilih Layanan Operator:", "green"))
-            print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "green"))
+            print(color_text("📱 Pilih Layanan Operator:", "cyan"))
+            print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "yellow"))
             print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "green"))
-            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "green"))
-            print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "green"))
-            choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4): ", "green"))
+            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "blue"))
+            print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "red"))
+            choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4): ", "magenta"))
             
             if choice_service == "1":
                 service_id = "305"  # GOJEK
