@@ -6,9 +6,12 @@ def color_text(text, color):
     colors = {
         "red": "\033[31m",
         "green": "\033[32m",
+        "whatsapp_green": "\033[38;5;46m",  # Hijau khas WhatsApp
         "yellow": "\033[33m",
         "blue": "\033[34m",
+        "telegram_blue": "\033[38;5;33m",  # Biru khas Telegram
         "magenta": "\033[35m",
+        "orange": "\033[38;5;214m",
         "cyan": "\033[36m",
         "white": "\033[37m",
         "reset": "\033[0m"  # Untuk mengembalikan warna ke default
@@ -227,10 +230,10 @@ def main_menu(api_key, service_id, operator):
 
         if choice == "1":
             print(color_text("📱 Pilih Layanan Operator:", "cyan"))
-            print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "yellow"))
-            print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "green"))
-            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "blue"))
-            print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "red"))
+            print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "green"))
+            print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "whatsapp_green"))
+            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "telegram_blue"))
+            print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "orange"))
             choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4): ", "magenta"))
             
             if choice_service == "1":
