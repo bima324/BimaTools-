@@ -139,7 +139,7 @@ def monitor_sms(api_key, interval=5, resend_interval=120):
                         print(color_text("SMS Baru Diterima:", "green"))
                         print(color_text(f"Nomor Urut: {sms_data['order_number']}", "cyan"))
                         print(color_text(f"Nomor: {sms_data['number']}", "cyan"))
-                        print(color_text(f"OTP: {sms_data['otp']}", "green"))
+                        print(color_text(f"OTP: {sms_data['otp']}", "cyan"))
                         print(color_text(f"Service: {sms_data['service_name']}", "green"))
                         print(color_text("------------------------------------", "green"))
 
