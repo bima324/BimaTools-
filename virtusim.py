@@ -71,7 +71,7 @@ def create_order(api_key, service_id, operator):
     if success_numbers:
         print(color_text("Order Berhasil:", "green"))
         for number in success_numbers:
-            print(color_text(number, "green"))
+            print(color_text(number, "cyan"))
 
 def get_active_orders(api_key):
     url = f"https://virtusim.com/api/json.php?api_key={api_key}&action=active_order"
