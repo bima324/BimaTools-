@@ -14,9 +14,11 @@ def color_text(text, color):
         "orange": "\033[38;5;214m",
         "cyan": "\033[36m",
         "white": "\033[37m",
+        "purple": "\033[38;5;129m",  # Warna ungu ditambahkan di sini
         "reset": "\033[0m"  # Untuk mengembalikan warna ke default
     }
     return f"{colors[color]}{text}{colors['reset']}"
+
 
 def clear_screen():
     os.system("cls" if os.name == "nt" else "clear")
@@ -231,11 +233,13 @@ def main_menu(api_key, service_id, operator):
         if choice == "1":
             print(color_text("📱 Pilih Layanan Operator:", "cyan"))
             print(color_text("1️⃣ GOJEK 🚗 - Layanan transportasi cepat dan mudah", "green"))
-            print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "whatsapp_green"))
-            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "telegram_blue"))
+            print(color_text("2️⃣ WHATSAPP 💬 - Layanan pesan instan yang terhubung dengan nomor baru", "green"))
+            print(color_text("3️⃣ TELEGRAM 📲 - Layanan pesan instan yang aman dan terhubung dengan nomor baru", "blue"))
             print(color_text("4️⃣ SHOPEE 🛒 - Layanan belanja online yang terhubung dengan nomor baru", "orange"))
-            choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4): ", "magenta"))
-            
+            print(color_text("5️⃣ TIKTOK 🎵 - Layanan media sosial dan belanja online yang terhubung dengan nomor baru", "purple"))
+        
+            choice_service = input(color_text("🔢 Pilih Layanan (1/2/3/4/5): ", "magenta"))
+        
             if choice_service == "1":
                 service_id = "305"  # GOJEK
             elif choice_service == "2":
@@ -244,9 +248,12 @@ def main_menu(api_key, service_id, operator):
                 service_id = "733"  # TELEGRAM
             elif choice_service == "4":
                 service_id = "722"  # SHOPEE
+            elif choice_service == "5":
+                service_id = "735"  # TIKTOK
             else:
                 print(color_text("❌ Pilihan tidak valid, coba lagi.", "red"))
                 continue
+
 
 
             create_order(api_key, service_id, operator)
